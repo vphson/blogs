@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test('view published post on public site', async ({ page }) => {
   // Navigate to the post directly
-  await page.goto('http://localhost:3003/posts/welcome-to-our-zen-blog')
+  await page.goto('/posts/welcome-to-our-zen-blog')
   await page.waitForLoadState('networkidle')
 
   // Wait for content to load

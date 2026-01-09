@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 test('login attempt', async ({ page }) => {
-  await page.goto('http://localhost:3003/login')
+  await page.goto('/login')
   await page.waitForLoadState('networkidle')
 
   // Fill credentials

@@ -36,16 +36,13 @@ export function PostContent({ content }: PostContentProps) {
     })
 
     return (
-      <div
-        className="prose prose-stone max-w-none dark:prose-invert prose-pre:bg-gray-900 prose-pre:text-gray-100"
-        dangerouslySetInnerHTML={{ __html: sanitized }}
-      />
+      <div dangerouslySetInnerHTML={{ __html: sanitized }} />
     )
   }
 
   // Fallback: render as Markdown
   return (
-    <div className="prose prose-stone max-w-none dark:prose-invert">
+    <div>
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
     </div>
   )

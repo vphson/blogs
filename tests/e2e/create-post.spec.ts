@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 async function login(page) {
-  await page.goto('http://localhost:3003/login')
+  await page.goto('/login')
   await page.waitForLoadState('networkidle')
   await page.fill('#email', 'test-admin@example.com')
   await page.fill('#password', 'Test123456')
@@ -11,7 +11,7 @@ async function login(page) {
 
 test('create and publish test post', async ({ page }) => {
   await login(page)
-  await page.goto('http://localhost:3003/admin/posts/new')
+  await page.goto('/admin/posts/new')
   await page.waitForLoadState('networkidle')
 
   // Fill in title
