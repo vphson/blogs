@@ -1,0 +1,64 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// Note: Admin authentication handled by Supabase Auth
+// No custom User model needed - use auth.users from Supabase
+
+model Post {
+  id          String         @id @default(uuid())
+  title       String
+  slug        String         @unique
+  content     String         @db.Text
+  excerpt     String?        @db.VarChar(500)
+  coverImage  String?
+  status      PostStatus     @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  deletedAt   DateTime?
+  authorId    String?        @default("00000000-0000-0000-0000-000000000000") // Reference to Supabase Auth user ID
+
+  categories  PostCategory[]
+
+  @@index([slug])
+  @@index([status, publishedAt])
+  @@index([authorId])
+}
+
+model Category {
+  id          String         @id @default(uuid())
+  name        String         @unique
+  slug        String         @unique
+  description String?        @db.VarChar(500)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  posts       PostCategory[]
+
+  @@index([slug])
+  @@index([name])
+}
+
+model PostCategory {
+  postId     String   @default(uuid())
+  categoryId String   @default(uuid())
+  createdAt  DateTime @default(now())
+
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+  @@index([postId, categoryId])
+}
