@@ -214,6 +214,7 @@ export function PostList({ initialPosts }: PostListProps) {
                             alt=""
                             fill
                             className="object-cover"
+                            unoptimized
                           />
                         </div>
                       )}
