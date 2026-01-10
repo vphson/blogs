@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { deletePost, publishPost, unpublishPost } from '@/lib/blog/actions'
 import type { PostWithCategories } from '@/lib/types/blog'
 import type { PostStatus } from '@/lib/constants'
@@ -207,11 +208,12 @@ export function PostList({ initialPosts }: PostListProps) {
                   <td className="px-6 py-4">
                     <div className="flex items-center">
                       {post.cover_image && (
-                        <div className="mr-4 h-12 w-12 flex-shrink-0">
-                          <img
-                            className="h-12 w-12 rounded object-cover"
+                        <div className="relative mr-4 h-12 w-12 flex-shrink-0 overflow-hidden rounded">
+                          <Image
                             src={post.cover_image}
                             alt=""
+                            fill
+                            className="object-cover"
                           />
                         </div>
                       )}
