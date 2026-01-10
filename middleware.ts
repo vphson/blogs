@@ -2,29 +2,35 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 
 export async function middleware(request: NextRequest) {
-  // Create Supabase client for middleware
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
-        },
-      },
-    }
-  )
-
-  // Protect admin routes
+  // Protect admin routes only
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    // Check if user is authenticated
-    const { data: { user } } = await supabase.auth.getUser()
+    try {
+      // Create Supabase client for middleware
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            get(name: string) {
+              return request.cookies.get(name)?.value
+            },
+          },
+        }
+      )
 
-    if (!user) {
-      // Redirect to login if not authenticated
+      // Check if user is authenticated
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (!user) {
+        // Redirect to login if not authenticated
+        const loginUrl = new URL('/login', request.url)
+        loginUrl.searchParams.set('redirect', request.nextUrl.pathname + request.nextUrl.search)
+        return NextResponse.redirect(loginUrl)
+      }
+    } catch (error) {
+      console.error('Middleware error:', error)
+      // On error, redirect to login for safety
       const loginUrl = new URL('/login', request.url)
-      // Add redirect parameter to return after login
-      loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
       return NextResponse.redirect(loginUrl)
     }
   }
