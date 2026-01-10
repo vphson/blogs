@@ -2,10 +2,11 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import { SearchBar } from '@/components/public/SearchBar'
 import { PostCard } from '@/components/public/PostCard'
+import { LoadMoreButton } from '@/components/public/LoadMoreButton'
 import { searchPosts } from '@/lib/blog/queries'
 
 interface SearchPageProps {
-  searchParams: Promise<{ q?: string }>
+  searchParams: Promise<{ q?: string; cursor?: string }>
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -13,24 +14,19 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const query = params.q || ''
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-stone-50 to-stone-100">
-      <div className="mx-auto max-w-3xl px-4 py-16">
+    <main className="min-h-screen bg-zen-bg">
+      <div className="zen-container py-16">
         <header className="mb-16 text-center">
           <div className="mb-6 flex justify-center gap-6 text-sm">
-            <Link
-              href="/"
-              className="text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
-            >
+            <Link href="/" className="zen-link">
               Trang chủ
             </Link>
-            <Link
-              href="/danh-muc"
-              className="text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
-            >
+            <span className="text-zen-muted">·</span>
+            <Link href="/danh-muc" className="zen-link">
               Danh mục
             </Link>
           </div>
-          <h1 className="mb-4 text-4xl font-light tracking-wide text-stone-800">
+          <h1 className="mb-4 font-display text-4xl font-light tracking-wide text-zen-primary">
             Tìm kiếm
           </h1>
           <div className="mx-auto max-w-md">
@@ -39,22 +35,25 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </header>
 
         <Suspense fallback={<SearchResultsSkeleton />}>
-          <SearchResults query={query} />
+          <SearchResults query={query} cursor={params.cursor} />
         </Suspense>
       </div>
     </main>
   )
 }
 
-async function SearchResults({ query }: { query: string }) {
-  const results = await searchPosts(query)
+async function SearchResults({ query, cursor }: { query: string; cursor?: string }) {
+  const { data: results, count, hasMore, nextCursor } = await searchPosts(query, {
+    limit: 10,
+    cursor,
+  })
 
   if (!query) {
     return (
       <section className="text-center">
-        <div className="mb-8 inline-flex items-center justify-center rounded-full bg-stone-100 p-6 dark:bg-stone-800">
+        <div className="mb-8 inline-flex items-center justify-center rounded-full bg-zen-surface p-6">
           <svg
-            className="h-12 w-12 text-stone-400"
+            className="h-12 w-12 text-zen-muted"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -67,10 +66,10 @@ async function SearchResults({ query }: { query: string }) {
             />
           </svg>
         </div>
-        <h2 className="mb-2 text-xl font-medium text-stone-800 dark:text-stone-100">
+        <h2 className="mb-2 font-display text-xl text-zen-primary">
           Nhập từ khóa để tìm kiếm
         </h2>
-        <p className="text-stone-600 dark:text-stone-400">
+        <p className="text-zen-secondary">
           Tìm kiếm bài viết theo tiêu đề, nội dung hoặc mô tả
         </p>
       </section>
@@ -80,9 +79,9 @@ async function SearchResults({ query }: { query: string }) {
   if (results.length === 0) {
     return (
       <section className="text-center">
-        <div className="mb-8 inline-flex items-center justify-center rounded-full bg-stone-100 p-6 dark:bg-stone-800">
+        <div className="mb-8 inline-flex items-center justify-center rounded-full bg-zen-surface p-6">
           <svg
-            className="h-12 w-12 text-stone-400"
+            className="h-12 w-12 text-zen-muted"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -95,16 +94,16 @@ async function SearchResults({ query }: { query: string }) {
             />
           </svg>
         </div>
-        <h2 className="mb-2 text-xl font-medium text-stone-800 dark:text-stone-100">
+        <h2 className="mb-2 font-display text-xl text-zen-primary">
           Không tìm thấy bài viết nào
         </h2>
-        <p className="mb-6 text-stone-600 dark:text-stone-400">
+        <p className="mb-6 text-zen-secondary">
           Không tìm thấy bài viết nào phù hợp với{' '}
-          <span className="font-medium text-stone-800 dark:text-stone-100">
+          <span className="font-medium text-zen-primary">
             &quot;{query}&quot;
           </span>
         </p>
-        <div className="flex flex-col items-center gap-3 text-sm text-stone-600 dark:text-stone-400">
+        <div className="flex flex-col items-center gap-3 text-sm text-zen-secondary">
           <p>Gợi ý:</p>
           <ul className="list-disc list-inside space-y-1">
             <li>Thử từ khóa khác</li>
@@ -113,7 +112,7 @@ async function SearchResults({ query }: { query: string }) {
           </ul>
           <Link
             href="/"
-            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-stone-200 bg-white px-4 py-2 transition-all hover:border-stone-300 hover:shadow-sm dark:border-stone-700 dark:bg-stone-900 dark:hover:border-stone-600"
+            className="zen-link mt-4 inline-flex items-center gap-2"
           >
             <svg
               className="h-4 w-4"
@@ -132,7 +131,7 @@ async function SearchResults({ query }: { query: string }) {
           </Link>
           <Link
             href="/danh-muc"
-            className="inline-flex items-center gap-2 rounded-lg border border-stone-200 bg-white px-4 py-2 transition-all hover:border-stone-300 hover:shadow-sm dark:border-stone-700 dark:bg-stone-900 dark:hover:border-stone-600"
+            className="zen-link inline-flex items-center gap-2"
           >
             <svg
               className="h-4 w-4"
@@ -157,13 +156,13 @@ async function SearchResults({ query }: { query: string }) {
   return (
     <section>
       <div className="mb-8 text-center">
-        <p className="text-stone-600 dark:text-stone-400">
+        <p className="text-zen-secondary">
           Tìm thấy{' '}
-          <span className="font-semibold text-stone-800 dark:text-stone-100">
-            {results.length}
+          <span className="font-semibold text-zen-primary">
+            {count}
           </span>{' '}
           bài viết cho từ khóa{' '}
-          <span className="font-semibold text-stone-800 dark:text-stone-100">
+          <span className="font-semibold text-zen-primary">
             &quot;{query}&quot;
           </span>
         </p>
@@ -174,6 +173,12 @@ async function SearchResults({ query }: { query: string }) {
           <PostCard key={post.id} post={post} />
         ))}
       </div>
+
+      {/* Load More Button */}
+      <LoadMoreButton
+        nextCursor={nextCursor || ''}
+        hasMore={hasMore}
+      />
     </section>
   )
 }
@@ -182,20 +187,20 @@ function SearchResultsSkeleton() {
   return (
     <section>
       <div className="mb-8 text-center">
-        <div className="h-6 w-48 animate-pulse rounded bg-stone-200 dark:bg-stone-800 mx-auto" />
+        <div className="h-6 w-48 animate-pulse rounded bg-zen-border mx-auto" />
       </div>
       <div className="grid gap-8">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="rounded-lg bg-white p-6 shadow-sm dark:bg-stone-900">
+          <div key={i} className="rounded-zen bg-zen-elevated p-6 shadow-sm">
             <div className="mb-3 flex gap-2">
-              <div className="h-6 w-20 animate-pulse rounded-full bg-stone-200 dark:bg-stone-800" />
+              <div className="h-6 w-20 animate-pulse rounded-full bg-zen-border" />
             </div>
-            <div className="mb-3 h-7 w-3/4 animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
+            <div className="mb-3 h-7 w-3/4 animate-pulse rounded bg-zen-border" />
             <div className="mb-4 flex gap-2">
-              <div className="h-4 w-full animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
-              <div className="h-4 w-2/3 animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
+              <div className="h-4 w-full animate-pulse rounded bg-zen-border" />
+              <div className="h-4 w-2/3 animate-pulse rounded bg-zen-border" />
             </div>
-            <div className="h-4 w-32 animate-pulse rounded bg-stone-200 dark:bg-stone-800" />
+            <div className="h-4 w-32 animate-pulse rounded bg-zen-border" />
           </div>
         ))}
       </div>

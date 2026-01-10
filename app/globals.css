@@ -26,20 +26,10 @@
   --accent-brown: #78350f;       /* Warm brown */
   --accent-amber: #d97706;       /* Amber/leather */
   --accent-border: #e7e5e4;      /* Subtle border */
-  --accent-subtle: #fef3c7;      /* Warm highlight */
-
-  /* Semantic colors */
-  --success: #059669;
-  --error: #dc2626;
 
   /* Typography */
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Merriweather', Georgia, serif;
-
-  /* Spacing */
-  --spacing-sm: 1rem;
-  --spacing-md: 2rem;
-  --spacing-lg: 4rem;
 
   /* Transitions */
   --transition: 200ms ease-out;
@@ -154,34 +144,63 @@ a:hover {
   .font-body {
     font-family: var(--font-body);
   }
+}
 
-  /* Color utilities */
-  .bg-paper {
-    background-color: var(--paper-bg);
+/* ==================================================
+   ZEN COMPONENT UTILITIES
+   ================================================== */
+@layer components {
+  /* Zen Container */
+  .zen-container {
+    @apply mx-auto max-w-2xl px-6;
   }
 
-  .bg-paper-surface {
-    background-color: var(--paper-surface);
+  /* Zen Card */
+  .zen-card {
+    @apply bg-zen-elevated border border-zen-border rounded-zen;
+    @apply transition-all duration-200;
+    @apply hover:shadow-md;
   }
 
-  .text-paper-primary {
-    color: var(--text-primary);
+  /* Zen Link */
+  .zen-link {
+    @apply text-zen-secondary hover:text-zen-accent;
+    @apply underline decoration-1 underline-offset-2;
+    @apply transition-colors duration-200;
   }
 
-  .text-paper-secondary {
-    color: var(--text-secondary);
+  /* Zen Button Primary */
+  .zen-btn-primary {
+    @apply bg-zen-accent text-white rounded-zen px-6 py-2.5;
+    @apply hover:bg-zen-accent-hover transition-colors;
   }
 
-  .text-paper-muted {
-    color: var(--text-muted);
+  /* Zen Button Ghost */
+  .zen-btn-ghost {
+    @apply text-zen-secondary hover:text-zen-primary;
+    @apply hover:bg-zen-surface rounded-zen px-4 py-2;
+    @apply transition-colors;
   }
 
-  .text-accent {
-    color: var(--accent-brown);
+  /* Zen Input */
+  .zen-input {
+    @apply w-full rounded-zen border border-zen-border px-4 py-2;
+    @apply bg-zen-elevated text-zen-primary;
+    @apply focus:border-zen-accent focus:outline-none focus:ring-2;
   }
 
-  .border-paper {
-    border-color: var(--accent-border);
+  /* Zen Badge */
+  .zen-badge {
+    @apply inline-flex items-center rounded-full px-3 py-1;
+    @apply text-xs font-medium;
+  }
+
+  .zen-badge-accent {
+    @apply bg-amber-100 text-amber-800;
+  }
+
+  .zen-badge-muted {
+    @apply bg-gray-100 text-gray-700;
   }
 }
 
@@ -194,7 +213,7 @@ hr {
   border: none;
   height: 1px;
   background: var(--accent-border);
-  margin: var(--spacing-lg) 0;
+  margin: 4rem 0;
 }
 
 /* Selection */

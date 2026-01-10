@@ -65,7 +65,12 @@ export async function createPost(data: CreatePostData) {
 
       if (categoriesError) {
         console.error('Error associating categories:', categoriesError)
-        // Don't fail the entire operation if category association fails
+        // Return with warning instead of silent failure
+        return {
+          success: true,
+          data: post,
+          warning: 'Post created but categories could not be associated',
+        }
       }
     }
 
@@ -113,6 +118,11 @@ export async function updatePost(data: UpdatePostData) {
 
     if (!existingPost) {
       return { success: false, error: 'Post not found' }
+    }
+
+    // Verify user owns this post
+    if (existingPost.author_id !== user.id) {
+      return { success: false, error: 'Forbidden: You can only modify your own posts' }
     }
 
     // Generate slug from title if not provided
@@ -177,7 +187,12 @@ export async function updatePost(data: UpdatePostData) {
 
         if (categoriesError) {
           console.error('Error associating categories:', categoriesError)
-          // Don't fail the entire operation if category association fails
+          // Return with warning instead of silent failure
+          return {
+            success: true,
+            data: post,
+            warning: 'Post updated but categories could not be associated',
+          }
         }
       }
     }
@@ -216,15 +231,20 @@ export async function deletePost(id: string) {
       return { success: false, error: 'Unauthorized' }
     }
 
-    // Get post slug before deleting for revalidation
+    // Get post slug and author_id before deleting for revalidation and auth check
     const { data: existingPost } = await supabase
       .from('posts')
-      .select('slug')
+      .select('slug, author_id')
       .eq('id', id)
       .single()
 
     if (!existingPost) {
       return { success: false, error: 'Post not found' }
+    }
+
+    // Verify user owns this post
+    if (existingPost.author_id !== user.id) {
+      return { success: false, error: 'Forbidden: You can only delete your own posts' }
     }
 
     // Soft delete by setting deleted_at
@@ -267,6 +287,21 @@ export async function publishPost(id: string) {
 
     if (!user) {
       return { success: false, error: 'Unauthorized' }
+    }
+
+    // First verify post exists and user owns it
+    const { data: existingPost } = await supabase
+      .from('posts')
+      .select('id, author_id')
+      .eq('id', id)
+      .single()
+
+    if (!existingPost) {
+      return { success: false, error: 'Post not found' }
+    }
+
+    if (existingPost.author_id !== user.id) {
+      return { success: false, error: 'Forbidden: You can only publish your own posts' }
     }
 
     // Update post status to published
@@ -335,15 +370,20 @@ export async function unpublishPost(id: string) {
       return { success: false, error: 'Unauthorized' }
     }
 
-    // Get post slug before unpublishing
+    // Get post slug and author_id before unpublishing
     const { data: existingPost } = await supabase
       .from('posts')
-      .select('slug')
+      .select('slug, author_id')
       .eq('id', id)
       .single()
 
     if (!existingPost) {
       return { success: false, error: 'Post not found' }
+    }
+
+    // Verify user owns this post
+    if (existingPost.author_id !== user.id) {
+      return { success: false, error: 'Forbidden: You can only unpublish your own posts' }
     }
 
     // Update post status to draft

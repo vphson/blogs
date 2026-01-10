@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import { ThemeProvider } from "@/lib/design/providers"
 
 export const metadata: Metadata = {
   title: "Blog Thiền - Chia sẻ cảm nhận về cuộc sống",
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className="antialiased">
-        {children}
+        <ThemeProvider defaultTheme="zen">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

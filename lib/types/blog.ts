@@ -52,5 +52,19 @@ export interface UpdatePostData extends Partial<CreatePostData> {
 export interface ActionResult<T = void> {
   success: boolean
   error?: string
+  warning?: string
   data?: T
+}
+
+// Pagination types
+export interface PaginationParams {
+  limit?: number
+  cursor?: string
+}
+
+export interface PaginatedResult<T> {
+  data: T[]
+  count: number
+  hasMore: boolean
+  nextCursor?: string
 }

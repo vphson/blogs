@@ -51,12 +51,12 @@ export function SearchBar() {
             setIsOpen(true)
             setTimeout(() => inputRef.current?.focus(), 100)
           }}
-          className="flex items-center gap-2 border border-zen px-4 py-2 text-sm text-zen-secondary transition-all duration-300 hover:border-[#B8A882] hover:text-[#B8A882] bg-transparent"
+          className="flex items-center gap-2 border border-zen-border px-4 py-2 text-sm text-zen-secondary transition-all duration-300 hover:border-zen-accent hover:text-zen-accent bg-transparent"
           aria-label="Tìm kiếm"
         >
           <Search className="h-4 w-4" />
           <span className="hidden sm:inline">Tìm kiếm</span>
-          <kbd className="ml-auto hidden border border-zen px-1.5 py-0.5 text-xs text-zen-muted sm:inline-block">
+          <kbd className="ml-auto hidden border border-zen-border px-1.5 py-0.5 text-xs text-zen-muted sm:inline-block">
             ⌘K
           </kbd>
         </button>
@@ -73,7 +73,7 @@ export function SearchBar() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Tìm kiếm bài viết..."
-              className="w-full border border-zen bg-transparent py-2 pl-10 pr-20 text-sm outline-none transition-all duration-300 focus:border-[#B8A882] focus:ring-1 focus:ring-[#B8A882]/20 font-zen-body text-zen-primary placeholder:text-zen-muted"
+              className="zen-input w-full py-2 pl-10 pr-20 text-sm"
               autoComplete="off"
             />
             <div className="absolute right-2 flex items-center gap-1">
@@ -98,7 +98,7 @@ export function SearchBar() {
               >
                 <X className="h-4 w-4" />
               </button>
-              <kbd className="border border-zen px-1.5 py-0.5 text-xs text-zen-muted">
+              <kbd className="border border-zen-border px-1.5 py-0.5 text-xs text-zen-muted">
                 Enter
               </kbd>
             </div>

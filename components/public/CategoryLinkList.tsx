@@ -22,8 +22,8 @@ export function CategoryLinkList({
   }
 
   return (
-    <div className="border-t border-b border-gray-200 py-8">
-      <h3 className="mb-6 text-center font-display text-sm tracking-widest uppercase text-gray-600">
+    <div className="border-t border-b border-zen-border py-8">
+      <h3 className="mb-6 text-center font-display text-sm tracking-widest uppercase text-zen-secondary">
         {title}
       </h3>
       <ul className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
@@ -31,10 +31,10 @@ export function CategoryLinkList({
           <li key={category.id}>
             <Link
               href={`/danh-muc/${category.slug}`}
-              className="group flex items-center gap-2 text-sm text-gray-600 hover:text-amber-700 transition-colors duration-200"
+              className="group flex items-center gap-2 text-sm text-zen-secondary hover:text-zen-accent transition-colors duration-200"
             >
               <span className="font-body">{category.name}</span>
-              <span className="text-xs text-gray-400 group-hover:text-amber-700 transition-colors duration-200">
+              <span className="text-xs text-zen-muted group-hover:text-zen-accent transition-colors duration-200">
                 {category.post_count}
               </span>
             </Link>

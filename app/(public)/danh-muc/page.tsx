@@ -11,84 +11,94 @@ export default async function CategoryListPage() {
   const categories = await getAllCategoriesWithPostCount()
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-stone-50 to-stone-100">
-      <div className="mx-auto max-w-3xl px-4 py-16">
-        {/* Top bar with back button and search */}
-        <div className="mb-8 flex items-center justify-between">
-          <Link
-            href="/"
-            className="inline-flex items-center text-sm text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
-          >
-            <svg
-              className="mr-2 h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Quay lại trang chủ
-          </Link>
-          <SearchBar />
-        </div>
+    <main className="min-h-screen bg-zen-bg">
+      <div className="zen-container">
+        {/* Top spacing - tạo khoảng thở */}
+        <div className="h-24 md:h-32" />
 
-        {/* Header */}
-        <header className="mb-12 text-center">
-          <h1 className="mb-4 text-4xl font-light tracking-wide text-stone-800 dark:text-stone-100">
+        {/* Navigation - đơn giản, không underline */}
+        <nav className="mb-16">
+          <div className="flex items-center justify-center gap-6 text-sm text-zen-secondary">
+            <Link href="/" className="zen-link">
+              Trang chủ
+            </Link>
+            <span className="text-zen-muted">·</span>
+            <span className="text-zen-primary">Danh mục</span>
+            <span className="text-zen-muted">·</span>
+            <SearchBar />
+          </div>
+        </nav>
+
+        {/* Header - tịnh, chỉ có tiêu đề */}
+        <header className="mb-16 text-center">
+          <h1 className="font-display text-3xl md:text-4xl font-light text-zen-primary tracking-wide">
             Danh mục
           </h1>
-          <p className="text-lg text-stone-600 dark:text-stone-400">
-            Khám phá các chủ đề về thiền và cuộc sống
-          </p>
+          <div className="mt-6 flex items-center justify-center gap-4">
+            <div className="h-px w-12 bg-zen-border" />
+            <div className="h-px w-12 bg-zen-border" />
+          </div>
         </header>
 
-        {/* Category grid */}
-        <section className="mb-12">
+        {/* Categories List - đơn dòng, không border, không shadow */}
+        <section className="mb-20">
           {categories.length === 0 ? (
-            <div className="rounded-lg bg-white p-8 text-center shadow-sm dark:bg-stone-900">
-              <p className="text-stone-500 dark:text-stone-400">
-                Chưa có danh mục nào.
+            <div className="text-center py-20">
+              <p className="text-zen-muted font-light">
+                Chưa có danh mục nào
               </p>
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="space-y-3">
               {categories.map((category) => (
                 <Link
                   key={category.id}
                   href={`/danh-muc/${category.slug}`}
-                  className="group overflow-hidden rounded-lg bg-white p-6 shadow-sm transition-all hover:shadow-md dark:bg-stone-900"
+                  className="group block py-6 px-6 text-center hover:bg-zen-surface transition-colors duration-500"
                 >
-                  <h2 className="mb-2 text-xl font-medium text-stone-800 group-hover:text-stone-600 dark:text-stone-100 dark:group-hover:text-stone-300">
+                  {/* Tên danh mục - lớn, nhẹ */}
+                  <h2 className="font-display text-xl md:text-2xl font-light text-zen-primary mb-2 group-hover:text-zen-accent transition-colors">
                     {category.name}
                   </h2>
+
+                  {/* Mô tả - nhỏ, xám nhạt */}
                   {category.description && (
-                    <p className="mb-4 text-sm text-stone-600 dark:text-stone-400">
+                    <p className="text-sm text-zen-secondary font-light max-w-md mx-auto mb-3">
                       {category.description}
                     </p>
                   )}
-                  <div className="text-sm text-stone-400 dark:text-stone-500">
-                    {category.post_count} bài viết
-                  </div>
+
+                  {/* Số bài viết - rất nhỏ, không icon */}
+                  <span className="text-xs text-zen-muted">
+                    {category.post_count || 0} bài viết
+                  </span>
                 </Link>
               ))}
+
+              {/* Divider nhẹ giữa các danh mục */}
+              <div className="border-t border-zen-border" />
             </div>
           )}
         </section>
 
-        {/* Footer */}
-        <footer className="mt-16 text-center text-sm text-stone-400">
-          <Link
-            href="/"
-            className="hover:text-stone-600 dark:hover:text-stone-300"
-          >
-            ← Quay lại trang chủ
-          </Link>
+        {/* Footer - triết lý ngắn gọn */}
+        <footer className="py-16 text-center">
+          <blockquote className="font-display text-lg text-zen-secondary font-light leading-relaxed max-w-md mx-auto">
+            &ldquo;Chấp nhận hiện tại,<br />buông bỏ quá khứ&rdquo;
+          </blockquote>
+
+          <div className="mt-12">
+            <Link
+              href="/"
+              className="zen-link text-sm"
+            >
+              ← Trang chủ
+            </Link>
+          </div>
         </footer>
+
+        {/* Bottom spacing */}
+        <div className="h-24" />
       </div>
     </main>
   )

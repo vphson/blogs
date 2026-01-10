@@ -9,9 +9,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Zen-inspired color palette
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        // Zen color palette - references existing CSS variables
+        zen: {
+          bg: "var(--paper-bg)",
+          surface: "var(--paper-surface)",
+          elevated: "var(--paper-elevated)",
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+          muted: "var(--text-muted)",
+          border: "var(--accent-border)",
+          accent: "var(--accent-brown)",
+          "accent-hover": "var(--accent-amber)",
+        },
+      },
+      fontFamily: {
+        display: ["var(--font-display)", "serif"],
+        body: ["var(--font-body)", "serif"],
+      },
+      borderRadius: {
+        zen: "0.5rem",
       },
     },
   },

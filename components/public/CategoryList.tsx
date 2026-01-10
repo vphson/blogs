@@ -22,7 +22,7 @@ export function CategoryList({ categories, variant = 'default', maxDisplay, link
         <CategoryBadge key={category.id} category={category} variant={variant} linkable={linkable} />
       ))}
       {hasMore && (
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-stone-500">
+        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-zen-muted">
           +{categories.length - maxDisplay}
         </span>
       )}
