@@ -14,10 +14,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const query = params.q || ''
 
   return (
-    <main className="min-h-screen bg-zen-bg">
-      <div className="zen-container py-16">
-        <header className="mb-16 text-center">
-          <div className="mb-6 flex justify-center gap-6 text-sm">
+    <main className="min-h-screen bg-gradient-to-b from-zen-bg to-zen-surface">
+      <div className="zen-container py-8 md:py-10">
+        <header className="mb-8 text-center animate-fade-in">
+          <div className="mb-4 flex justify-center gap-6 text-sm">
             <Link href="/" className="zen-link">
               Trang chủ
             </Link>
@@ -26,7 +26,15 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               Danh mục
             </Link>
           </div>
-          <h1 className="mb-4 font-display text-4xl font-light tracking-wide text-zen-primary">
+
+          {/* Decorative element */}
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="h-px w-12 bg-gradient-to-r from-transparent via-zen-accent to-transparent" />
+            <div className="w-2 h-2 rounded-full bg-zen-accent animate-pulse" />
+            <div className="h-px w-12 bg-gradient-to-r from-transparent via-zen-accent to-transparent" />
+          </div>
+
+          <h1 className="mb-4 font-display text-4xl md:text-5xl font-semibold text-zen-primary leading-tight">
             Tìm kiếm
           </h1>
           <div className="mx-auto max-w-md">
@@ -50,7 +58,7 @@ async function SearchResults({ query, cursor }: { query: string; cursor?: string
 
   if (!query) {
     return (
-      <section className="text-center">
+      <section className="text-center animate-fade-in">
         <div className="mb-8 inline-flex items-center justify-center rounded-full bg-zen-surface p-6">
           <svg
             className="h-12 w-12 text-zen-muted"
@@ -66,7 +74,7 @@ async function SearchResults({ query, cursor }: { query: string; cursor?: string
             />
           </svg>
         </div>
-        <h2 className="mb-2 font-display text-xl text-zen-primary">
+        <h2 className="mb-2 font-display text-2xl text-zen-primary">
           Nhập từ khóa để tìm kiếm
         </h2>
         <p className="text-zen-secondary">
@@ -78,7 +86,7 @@ async function SearchResults({ query, cursor }: { query: string; cursor?: string
 
   if (results.length === 0) {
     return (
-      <section className="text-center">
+      <section className="text-center animate-fade-in">
         <div className="mb-8 inline-flex items-center justify-center rounded-full bg-zen-surface p-6">
           <svg
             className="h-12 w-12 text-zen-muted"
@@ -94,12 +102,12 @@ async function SearchResults({ query, cursor }: { query: string; cursor?: string
             />
           </svg>
         </div>
-        <h2 className="mb-2 font-display text-xl text-zen-primary">
+        <h2 className="mb-2 font-display text-2xl text-zen-primary">
           Không tìm thấy bài viết nào
         </h2>
         <p className="mb-6 text-zen-secondary">
           Không tìm thấy bài viết nào phù hợp với{' '}
-          <span className="font-medium text-zen-primary">
+          <span className="font-semibold text-zen-primary">
             &quot;{query}&quot;
           </span>
         </p>
@@ -154,7 +162,7 @@ async function SearchResults({ query, cursor }: { query: string; cursor?: string
   }
 
   return (
-    <section>
+    <section className="animate-fade-in">
       <div className="mb-8 text-center">
         <p className="text-zen-secondary">
           Tìm thấy{' '}

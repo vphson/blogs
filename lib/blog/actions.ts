@@ -8,6 +8,41 @@ import { POST_STATUS } from '@/lib/constants'
 
 /**
  * Create a new blog post
+ *
+ * Creates a new post with the provided data. Automatically generates slug from title
+ * if not provided, and generates excerpt from content if not provided.
+ * Requires authenticated user.
+ *
+ * @param data - Post creation data
+ * @param data.title - Post title
+ * @param data.content - Post content (HTML/TipTap format)
+ * @param data.slug - Optional URL slug (auto-generated from title if not provided)
+ * @param data.excerpt - Optional excerpt (auto-generated from content if not provided)
+ * @param data.cover_image - Optional cover image URL
+ * @param data.status - Post status ('DRAFT' or 'PUBLISHED')
+ * @param data.category_ids - Optional array of category IDs to associate
+ *
+ * @returns Result object containing:
+ *   - `success`: Whether the operation succeeded
+ *   - `data`: Created post object (if successful)
+ *   - `error`: Error message (if failed)
+ *   - `warning`: Warning message (if partial success)
+ *
+ * @example
+ * ```ts
+ * const result = await createPost({
+ *   title: 'My First Post',
+ *   content: '<p>Hello world!</p>',
+ *   status: 'DRAFT',
+ *   category_ids: ['cat-1', 'cat-2']
+ * })
+ *
+ * if (result.success) {
+ *   console.log('Created post:', result.data.id)
+ * } else {
+ *   console.error('Error:', result.error)
+ * }
+ * ```
  */
 export async function createPost(data: CreatePostData) {
   const supabase = await createClient()
@@ -93,6 +128,40 @@ export async function createPost(data: CreatePostData) {
 
 /**
  * Update an existing blog post
+ *
+ * Updates a post with new data. Only updates fields that are provided.
+ * Automatically regenerates slug and excerpt if title or content changes.
+ * User must be authenticated and own the post.
+ *
+ * @param data - Post update data
+ * @param data.id - Post ID to update
+ * @param data.title - Optional new title
+ * @param data.content - Optional new content
+ * @param data.slug - Optional new slug
+ * @param data.excerpt - Optional new excerpt
+ * @param data.cover_image - Optional new cover image URL (set to null to remove)
+ * @param data.status - Optional new status
+ * @param data.category_ids - Optional new array of category IDs (replaces existing)
+ *
+ * @returns Result object containing:
+ *   - `success`: Whether the operation succeeded
+ *   - `data`: Updated post object (if successful)
+ *   - `error`: Error message (if failed)
+ *   - `warning`: Warning message (if partial success)
+ *
+ * @example
+ * ```ts
+ * const result = await updatePost({
+ *   id: 'post-123',
+ *   title: 'Updated Title',
+ *   status: 'PUBLISHED',
+ *   category_ids: ['cat-1']
+ * })
+ *
+ * if (result.success) {
+ *   console.log('Updated post:', result.data.id)
+ * }
+ * ```
  */
 export async function updatePost(data: UpdatePostData) {
   const supabase = await createClient()
@@ -217,6 +286,27 @@ export async function updatePost(data: UpdatePostData) {
 
 /**
  * Soft delete a blog post
+ *
+ * Marks a post as deleted by setting the deleted_at timestamp.
+ * Post remains in database but won't appear in queries.
+ * User must be authenticated and own the post.
+ *
+ * @param id - Post ID to delete
+ *
+ * @returns Result object containing:
+ *   - `success`: Whether the operation succeeded
+ *   - `error`: Error message (if failed)
+ *
+ * @example
+ * ```ts
+ * const result = await deletePost('post-123')
+ *
+ * if (result.success) {
+ *   console.log('Post deleted successfully')
+ * } else {
+ *   console.error('Error:', result.error)
+ * }
+ * ```
  */
 export async function deletePost(id: string) {
   const supabase = await createClient()
@@ -275,6 +365,26 @@ export async function deletePost(id: string) {
 
 /**
  * Publish a draft post
+ *
+ * Changes a post's status from DRAFT to PUBLISHED and sets the published_at timestamp.
+ * User must be authenticated and own the post.
+ *
+ * @param id - Post ID to publish
+ *
+ * @returns Result object containing:
+ *   - `success`: Whether the operation succeeded
+ *   - `error`: Error message (if failed)
+ *
+ * @example
+ * ```ts
+ * const result = await publishPost('post-123')
+ *
+ * if (result.success) {
+ *   console.log('Post published successfully')
+ * } else {
+ *   console.error('Error:', result.error)
+ * }
+ * ```
  */
 export async function publishPost(id: string) {
   const supabase = await createClient()
@@ -337,6 +447,17 @@ export async function publishPost(id: string) {
 
 /**
  * Get all categories (for admin forms)
+ *
+ * Fetches all categories from the database ordered alphabetically by name.
+ * Used in admin forms for category selection.
+ *
+ * @returns Array of all categories, or empty array on error
+ *
+ * @example
+ * ```ts
+ * const categories = await getCategoriesForAdmin()
+ * console.log(`Found ${categories.length} categories`)
+ * ```
  */
 export async function getCategoriesForAdmin(): Promise<Category[]> {
   const supabase = await createClient()
@@ -356,6 +477,27 @@ export async function getCategoriesForAdmin(): Promise<Category[]> {
 
 /**
  * Unpublish a post (change to draft)
+ *
+ * Changes a post's status from PUBLISHED to DRAFT.
+ * Post will no longer be publicly visible.
+ * User must be authenticated and own the post.
+ *
+ * @param id - Post ID to unpublish
+ *
+ * @returns Result object containing:
+ *   - `success`: Whether the operation succeeded
+ *   - `error`: Error message (if failed)
+ *
+ * @example
+ * ```ts
+ * const result = await unpublishPost('post-123')
+ *
+ * if (result.success) {
+ *   console.log('Post unpublished successfully')
+ * } else {
+ *   console.error('Error:', result.error)
+ * }
+ * ```
  */
 export async function unpublishPost(id: string) {
   const supabase = await createClient()

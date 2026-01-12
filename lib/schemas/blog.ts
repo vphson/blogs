@@ -1,6 +1,13 @@
 import { z } from 'zod'
 import type { PostStatus } from '@/lib/constants'
 
+// Custom datetime validator that accepts various formats
+const datetimeString = z.string().refine((val) => {
+  // Check if it's a valid date string (various formats)
+  const date = new Date(val)
+  return !isNaN(date.getTime())
+}, { message: 'Invalid datetime string' })
+
 export const CategorySchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(100),
@@ -16,9 +23,9 @@ export const PostSchema = z.object({
   excerpt: z.string().nullable(),
   cover_image: z.string().url().nullable(),
   status: z.enum(['DRAFT', 'PUBLISHED']) as z.ZodType<PostStatus>,
-  published_at: z.string().datetime().nullable(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  published_at: datetimeString.nullable(),
+  created_at: datetimeString,
+  updated_at: datetimeString,
   categories: z.array(CategorySchema).optional(),
 })
 

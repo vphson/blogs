@@ -92,15 +92,17 @@ p {
 
 a {
   color: var(--accent-brown);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  transition: color var(--transition);
+  text-decoration: none;
+  transition: all var(--transition);
 }
 
 a:hover {
   color: var(--accent-amber);
-  text-decoration-thickness: 2px;
+  background: linear-gradient(to right, var(--accent-amber) 0%, var(--accent-amber) 100%);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 2px;
+  padding-bottom: 2px;
 }
 
 /* ==================================================
@@ -152,7 +154,7 @@ a:hover {
 @layer components {
   /* Zen Container */
   .zen-container {
-    @apply mx-auto max-w-2xl px-6;
+    @apply mx-auto max-w-4xl px-6;
   }
 
   /* Zen Card */
@@ -165,7 +167,7 @@ a:hover {
   /* Zen Link */
   .zen-link {
     @apply text-zen-secondary hover:text-zen-accent;
-    @apply underline decoration-1 underline-offset-2;
+    @apply no-underline;
     @apply transition-colors duration-200;
   }
 
@@ -213,7 +215,7 @@ hr {
   border: none;
   height: 1px;
   background: var(--accent-border);
-  margin: 4rem 0;
+  margin: 2rem 0;
 }
 
 /* Selection */
@@ -240,11 +242,11 @@ hr {
 }
 
 .prose p {
-  margin-bottom: 1.25em;
+  margin-bottom: 1em;
 }
 
 .prose h2 {
-  margin-top: 2em;
+  margin-top: 1.75em;
   margin-bottom: 0.75em;
 }
 
@@ -255,7 +257,16 @@ hr {
 
 .prose a {
   color: var(--accent-brown);
-  text-decoration: underline;
+  text-decoration: none;
+}
+
+.prose a:hover {
+  color: var(--accent-amber);
+  background: linear-gradient(to right, var(--accent-amber) 0%, var(--accent-amber) 100%);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 2px;
+  padding-bottom: 2px;
 }
 
 /* ==================================================

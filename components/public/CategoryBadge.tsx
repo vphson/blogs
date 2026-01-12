@@ -8,7 +8,7 @@ interface CategoryBadgeProps {
 }
 
 export function CategoryBadge({ category, variant = 'default', linkable = true }: CategoryBadgeProps) {
-  const baseClasses = 'inline-flex items-center text-xs font-medium transition-all duration-200 font-body'
+  const baseClasses = 'inline-flex items-center text-xs font-medium transition-all duration-200 font-body no-underline'
 
   const variantClasses = {
     default:
@@ -25,7 +25,7 @@ export function CategoryBadge({ category, variant = 'default', linkable = true }
   return (
     <Link
       href={`/danh-muc/${category.slug}`}
-      className={`${baseClasses} ${variantClasses[variant]} underline decoration-1 underline-offset-2`}
+      className={`${baseClasses} ${variantClasses[variant]}`}
     >
       {content}
     </Link>

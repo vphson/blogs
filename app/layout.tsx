@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { ThemeProvider } from "@/lib/design/providers"
+import { Analytics } from "@vercel/analytics/react"
 
 export const metadata: Metadata = {
   title: "Blog Thiền - Chia sẻ cảm nhận về cuộc sống",
@@ -18,6 +19,7 @@ export default function RootLayout({
         <ThemeProvider defaultTheme="zen">
           {children}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )

@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation'
 import { PostCard } from '@/components/public/PostCard'
 import { SearchBar } from '@/components/public/SearchBar'
 import { BackButton } from '@/components/ui/BackButton'
@@ -12,17 +11,17 @@ interface CategoryPageProps {
 
 export async function generateMetadata({ params }: CategoryPageProps) {
   const { slug } = await params
-  const category = await getCategoryBySlug(slug)
+  try {
+    const category = await getCategoryBySlug(slug)
 
-  if (!category) {
+    return {
+      title: `${category.name} - Blog Thiền`,
+      description: category.description || `Bài viết trong danh mục ${category.name}`,
+    }
+  } catch {
     return {
       title: 'Danh mục không tồn tại',
     }
-  }
-
-  return {
-    title: `${category.name} - Blog Thiền`,
-    description: category.description || `Bài viết trong danh mục ${category.name}`,
   }
 }
 
@@ -31,44 +30,56 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const category = await getCategoryBySlug(slug)
   const posts = await getPostsByCategory(slug)
 
-  if (!category) {
-    notFound()
-  }
-
   return (
-    <main className="min-h-screen bg-zen-bg">
-      <div className="zen-container py-16">
-        {/* Top bar with back button and search - Zen minimal */}
-        <div className="mb-12 flex items-center justify-between">
+    <main className="min-h-screen bg-gradient-to-b from-zen-bg to-zen-surface">
+      <div className="zen-container py-8 md:py-10">
+        {/* Top bar with back button and search */}
+        <div className="mb-6 flex items-center justify-between animate-fade-in">
           <BackButton />
           <SearchBar />
         </div>
 
-        {/* Category header - Zen display */}
-        <header className="mb-16 text-center">
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-light tracking-wide text-zen-primary leading-relaxed">
+        {/* Category header */}
+        <header className="mb-8 text-center animate-fade-in delay-100">
+          {/* Decorative element */}
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="h-px w-12 bg-gradient-to-r from-transparent via-zen-accent to-transparent" />
+            <div className="w-2 h-2 rounded-full bg-zen-accent animate-pulse" />
+            <div className="h-px w-12 bg-gradient-to-r from-transparent via-zen-accent to-transparent" />
+          </div>
+
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-zen-primary leading-tight mb-4">
             {category.name}
           </h1>
+
           {category.description && (
-            <p className="font-body text-lg md:text-xl text-zen-secondary italic font-light leading-relaxed max-w-2xl mx-auto mt-6">
+            <p className="font-body text-lg md:text-xl text-zen-secondary leading-relaxed max-w-2xl mx-auto">
               {category.description}
             </p>
           )}
+
+          {/* Post count */}
+          <div className="mt-6 inline-flex items-center gap-2 text-sm text-zen-muted">
+            <span className="text-zen-accent">✦</span>
+            <span>
+              <span className="font-semibold text-zen-primary">{posts.length}</span> bài viết
+            </span>
+          </div>
         </header>
 
         {/* Horizontal rule */}
-        <hr className="mb-16" />
+        <hr className="mb-8" />
 
         {/* Posts list */}
-        <section className="mb-16">
+        <section className="mb-8">
           {posts.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="font-body text-zen-secondary italic">
+            <div className="text-center py-12 animate-fade-in">
+              <p className="font-body text-zen-secondary italic text-lg">
                 Chưa có bài viết nào trong danh mục này. Hãy quay lại sau nhé.
               </p>
             </div>
           ) : (
-            <div className="space-y-16 md:space-y-20">
+            <div className="space-y-8 md:space-y-10">
               {posts.map((post, index) => (
                 <div
                   key={post.id}
@@ -83,10 +94,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </section>
 
         {/* Horizontal rule */}
-        <hr className="mb-16" />
+        <hr className="mb-8" />
 
         {/* Footer */}
-        <footer className="text-center">
+        <footer className="text-center animate-fade-in">
           <BackButton label="Quay lại trang chủ" />
         </footer>
       </div>

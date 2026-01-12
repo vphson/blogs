@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-async function login(page) {
+async function login(page: any) {
   await page.goto('/login')
   await page.waitForLoadState('networkidle')
   await page.fill('#email', 'test-admin@example.com')

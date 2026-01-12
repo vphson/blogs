@@ -11,94 +11,98 @@ export default async function CategoryListPage() {
   const categories = await getAllCategoriesWithPostCount()
 
   return (
-    <main className="min-h-screen bg-zen-bg">
-      <div className="zen-container">
-        {/* Top spacing - tạo khoảng thở */}
-        <div className="h-24 md:h-32" />
-
-        {/* Navigation - đơn giản, không underline */}
-        <nav className="mb-16">
-          <div className="flex items-center justify-center gap-6 text-sm text-zen-secondary">
+    <main className="min-h-screen bg-gradient-to-b from-zen-bg to-zen-surface">
+      <div className="zen-container py-8 md:py-10">
+        {/* Navigation */}
+        <nav className="mb-8 animate-fade-in">
+          <div className="flex items-center justify-center gap-6 text-sm">
             <Link href="/" className="zen-link">
               Trang chủ
             </Link>
             <span className="text-zen-muted">·</span>
-            <span className="text-zen-primary">Danh mục</span>
+            <span className="text-zen-primary font-medium">Danh mục</span>
             <span className="text-zen-muted">·</span>
             <SearchBar />
           </div>
         </nav>
 
-        {/* Header - tịnh, chỉ có tiêu đề */}
-        <header className="mb-16 text-center">
-          <h1 className="font-display text-3xl md:text-4xl font-light text-zen-primary tracking-wide">
+        {/* Header */}
+        <header className="mb-10 text-center animate-fade-in delay-100">
+          {/* Decorative element */}
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="h-px w-12 bg-gradient-to-r from-transparent via-zen-accent to-transparent" />
+            <div className="w-2 h-2 rounded-full bg-zen-accent animate-pulse" />
+            <div className="h-px w-12 bg-gradient-to-r from-transparent via-zen-accent to-transparent" />
+          </div>
+
+          <h1 className="font-display text-4xl md:text-5xl font-semibold text-zen-primary leading-tight mb-4">
             Danh mục
           </h1>
-          <div className="mt-6 flex items-center justify-center gap-4">
-            <div className="h-px w-12 bg-zen-border" />
-            <div className="h-px w-12 bg-zen-border" />
-          </div>
+          <p className="text-zen-secondary">
+            Khám phá các chủ đề về thiền và mindfulness
+          </p>
         </header>
 
-        {/* Categories List - đơn dòng, không border, không shadow */}
-        <section className="mb-20">
+        {/* Categories List */}
+        <section className="mb-10 animate-fade-in delay-200">
           {categories.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-zen-muted font-light">
+            <div className="text-center py-12">
+              <p className="text-zen-muted">
                 Chưa có danh mục nào
               </p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="grid gap-4 md:grid-cols-2">
               {categories.map((category) => (
                 <Link
                   key={category.id}
                   href={`/danh-muc/${category.slug}`}
-                  className="group block py-6 px-6 text-center hover:bg-zen-surface transition-colors duration-500"
+                  className="group relative block p-6 bg-zen-elevated rounded-zen border border-zen-border hover:shadow-md transition-all duration-300"
                 >
-                  {/* Tên danh mục - lớn, nhẹ */}
-                  <h2 className="font-display text-xl md:text-2xl font-light text-zen-primary mb-2 group-hover:text-zen-accent transition-colors">
+                  {/* Gradient border on hover */}
+                  <div className="absolute -inset-[1px] bg-gradient-to-r from-zen-accent/20 via-zen-accent/10 to-zen-accent/20 rounded-zen opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+
+                  {/* Category name */}
+                  <h2 className="font-display text-xl md:text-2xl font-semibold text-zen-primary leading-tight mb-2 group-hover:text-zen-accent transition-colors">
                     {category.name}
                   </h2>
 
-                  {/* Mô tả - nhỏ, xám nhạt */}
+                  {/* Description */}
                   {category.description && (
-                    <p className="text-sm text-zen-secondary font-light max-w-md mx-auto mb-3">
+                    <p className="text-sm text-zen-secondary mb-3 line-clamp-2">
                       {category.description}
                     </p>
                   )}
 
-                  {/* Số bài viết - rất nhỏ, không icon */}
-                  <span className="text-xs text-zen-muted">
-                    {category.post_count || 0} bài viết
-                  </span>
+                  {/* Post count */}
+                  <div className="flex items-center gap-2 text-sm text-zen-muted">
+                    <span className="text-zen-accent">✦</span>
+                    <span>
+                      <span className="font-medium text-zen-primary">{category.post_count || 0}</span> bài viết
+                    </span>
+                  </div>
                 </Link>
               ))}
-
-              {/* Divider nhẹ giữa các danh mục */}
-              <div className="border-t border-zen-border" />
             </div>
           )}
         </section>
 
-        {/* Footer - triết lý ngắn gọn */}
-        <footer className="py-16 text-center">
-          <blockquote className="font-display text-lg text-zen-secondary font-light leading-relaxed max-w-md mx-auto">
+        {/* Footer */}
+        <footer className="py-10 text-center animate-fade-in delay-300">
+          <blockquote className="font-display text-xl text-zen-secondary leading-relaxed max-w-md mx-auto mb-6 p-6 bg-zen-elevated rounded-zen border border-zen-border">
             &ldquo;Chấp nhận hiện tại,<br />buông bỏ quá khứ&rdquo;
           </blockquote>
 
-          <div className="mt-12">
-            <Link
-              href="/"
-              className="zen-link text-sm"
-            >
-              ← Trang chủ
-            </Link>
-          </div>
+          <Link
+            href="/"
+            className="zen-link text-sm inline-flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            Trang chủ
+          </Link>
         </footer>
-
-        {/* Bottom spacing */}
-        <div className="h-24" />
       </div>
     </main>
   )

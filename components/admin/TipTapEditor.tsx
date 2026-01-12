@@ -23,6 +23,8 @@ import {
 } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { ImageUploadModal } from './ImageUploadModal'
+import { LinkInsertModal } from './LinkInsertModal'
 
 interface TipTapEditorProps {
   initialContent?: string
@@ -39,8 +41,6 @@ export function TipTapEditor({
 }: TipTapEditorProps) {
   const [imageModalOpen, setImageModalOpen] = useState(false)
   const [linkModalOpen, setLinkModalOpen] = useState(false)
-  const [imageUrl, setImageUrl] = useState('')
-  const [linkUrl, setLinkUrl] = useState('')
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -80,21 +80,17 @@ export function TipTapEditor({
     }
   })
 
-  const addImage = useCallback(() => {
-    if (imageUrl && editor) {
-      editor.chain().focus().setImage({ src: imageUrl }).run()
-      setImageUrl('')
-      setImageModalOpen(false)
+  const addImage = useCallback((url: string) => {
+    if (url && editor) {
+      editor.chain().focus().setImage({ src: url }).run()
     }
-  }, [editor, imageUrl])
+  }, [editor])
 
-  const addLink = useCallback(() => {
-    if (linkUrl && editor) {
-      editor.chain().focus().setLink({ href: linkUrl }).run()
-      setLinkUrl('')
-      setLinkModalOpen(false)
+  const addLink = useCallback((url: string) => {
+    if (url && editor) {
+      editor.chain().focus().setLink({ href: url }).run()
     }
-  }, [editor, linkUrl])
+  }, [editor])
 
   if (!editor) {
     return null
@@ -253,74 +249,18 @@ export function TipTapEditor({
       )}
 
       {/* Link Modal */}
-      {linkModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Thêm liên kết</h3>
-            <input
-              type="url"
-              value={linkUrl}
-              onChange={(e) => setLinkUrl(e.target.value)}
-              placeholder="https://example.com"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-              autoFocus
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') addLink()
-                if (e.key === 'Escape') setLinkModalOpen(false)
-              }}
-            />
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                onClick={() => setLinkModalOpen(false)}
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                Hủy
-              </button>
-              <button
-                onClick={addLink}
-                className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors"
-              >
-                Thêm
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <LinkInsertModal
+        isOpen={linkModalOpen}
+        onClose={() => setLinkModalOpen(false)}
+        onAddLink={addLink}
+      />
 
       {/* Image Modal */}
-      {imageModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Thêm hình ảnh</h3>
-            <input
-              type="url"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="https://example.com/image.jpg"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-              autoFocus
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') addImage()
-                if (e.key === 'Escape') setImageModalOpen(false)
-              }}
-            />
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                onClick={() => setImageModalOpen(false)}
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                Hủy
-              </button>
-              <button
-                onClick={addImage}
-                className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors"
-              >
-                Thêm
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ImageUploadModal
+        isOpen={imageModalOpen}
+        onClose={() => setImageModalOpen(false)}
+        onAddImage={addImage}
+      />
 
       {/* Editor Content */}
       <EditorContent editor={editor} />
